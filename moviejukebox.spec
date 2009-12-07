@@ -6,6 +6,8 @@ Version:	1.7
 Release:	0.%{svnrev}.1
 License:	GPL v3
 Group:		Applications
+# svn export http://moviejukebox.googlecode.com/svn/trunk/moviejukebox
+# rm lib/commons-collections*jar lib/commons-logging*jar lib/commons-lang*jar lib/junit*jar
 Source0:	http://xatka.net/~z/PLD/%{name}-r%{svnrev}.tar.bz2
 # Source0-md5:	013170c09dbc2ba94409b5075d7430e8
 URL:		http://code.google.com/p/moviejukebox/
@@ -31,8 +33,8 @@ moviejukebox
 cat > moviejukebox.sh << EOF
 #!/bin/sh
 . %{_datadir}/java-utils/java-functions
-[ -d \$HOME/.moviejukebox ] || cp -a %{_datadir}/%{name}/properties \$HOME/.moviejukebox
-CLASSPATH=\$HOME/.moviejukebox:\$(build-classpath-directory %{_javadir}/%{name})
+mkdir -p \$HOME/.moviejukebox
+CLASSPATH=\$HOME/.moviejukebox:%{_datadir}/%{name}:\$(build-classpath-directory %{_javadir}/%{name})
 set_javacmd
 \$JAVACMD -Xms256m -Xmx512m -cp \$CLASSPATH com.moviejukebox.MovieJukebox "\$@"
 EOF
