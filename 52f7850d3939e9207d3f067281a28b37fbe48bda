@@ -1,0 +1,2 @@
+- do not copy config files into ~/.moviejukebox. Add /usr/share/moviejukebox to classpath istead.
+- added hints how to obtain sources
