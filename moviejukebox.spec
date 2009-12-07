@@ -30,33 +30,26 @@ moviejukebox
 %prep
 %setup -qn %{name}-r%{svnrev}
 
-cat > moviejukebox.sh << EOF
+cat > moviejukebox.sh <<'EOF'
 #!/bin/sh
 . %{_datadir}/java-utils/java-functions
-mkdir -p \$HOME/.moviejukebox
-CLASSPATH=\$HOME/.moviejukebox:%{_datadir}/%{name}:\$(build-classpath-directory %{_javadir}/%{name})
+mkdir -p $HOME/.moviejukebox
+CLASSPATH=$HOME/.moviejukebox:%{_datadir}/%{name}:$(build-classpath-directory %{_javadir}/%{name})
 set_javacmd
-\$JAVACMD -Xms256m -Xmx512m -cp \$CLASSPATH com.moviejukebox.MovieJukebox "\$@"
+exec $JAVACMD -Xms256m -Xmx512m -cp $CLASSPATH com.moviejukebox.MovieJukebox "$@"
 EOF
 
-chmod a+x %{name}.sh
-
 %build
-
 CLASSPATH=$(build-classpath commons-lang commons-collections commons-logging junit)
-
 %ant -Dbuild.sysclasspath=first
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_javadir}
-install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
-install -d $RPM_BUILD_ROOT%{_bindir}
-
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_javadir},%{_datadir}/%{name}}
 cp -a dist/lib $RPM_BUILD_ROOT%{_javadir}/%{name}
 cp -a dist/properties $RPM_BUILD_ROOT%{_datadir}/%{name}/properties
 cp -a dist/skins $RPM_BUILD_ROOT%{_datadir}/%{name}/skins
-install %{name}.sh $RPM_BUILD_ROOT%{_bindir}/%{name}
+install -p %{name}.sh $RPM_BUILD_ROOT%{_bindir}/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
