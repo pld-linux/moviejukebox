@@ -1,5 +1,4 @@
 %define		svnrev	1232
-%include	/usr/lib/rpm/macros.java
 Summary:	moviejukebox
 Name:		moviejukebox
 Version:	1.7
